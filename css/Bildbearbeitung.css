@@ -1,0 +1,265 @@
+/*.img:hover{
+	  color: #424242;
+	  position:absolute;
+	  -webkit-transition: all .3s ease-in;
+	  -moz-transition: all .3s ease-in;
+	  -ms-transition: all .3s ease-in;
+	  -o-transition: all .3s ease-in;
+	  transition: all .3s ease-in;
+	  opacity: 1;
+	  transform: scale(2.25);*/
+	/*  -ms-transform: scale(2.25); *//* IE 9 */
+	 /* -webkit-transform: scale(2.25);*/ /* Safari and Chrome */
+	  
+/*}*/
+
+.tablefilter {
+    font-size:14px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 2px;
+    display:none;
+}
+
+p,
+label {
+  font: 15px 'Exo 2', sans-serif;
+}
+
+/*input {
+  margin: 6px;
+}*/
+
+button {
+    margin-top: 2px;
+    padding-right:0px;
+    padding-left:0px;
+    color:black;
+    background:none;
+    font: 16px 'Exo 2', sans-serif;
+}
+button:hover {
+    color:green;
+    background: none;
+}
+
+.mom {
+    width: 980px; /* Try setting this to 400px or something */
+    display: table;
+    left:-300px;
+    position:relative;
+}
+
+.dad {
+    width: 2000px; /* Try setting this to 400px or something */
+    display: table;
+    left: -700px;
+    position:relative;
+}
+.child {
+    display: table-cell;
+}
+.childinner {
+    margin-left: 5px;
+    min-height: 0px;
+}
+.child:first-child .childinner {
+    margin-left: 0;
+}
+
+.panel {
+    background: white;
+    opacity: 0.7;
+}
+      /*body  {
+	  width:100%;
+	  height:900px;
+      }
+
+      body::after {
+	  content: "";
+	  background: url("bgdom.jpg") no-repeat center center fixed;  
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	  opacity: 0.2;
+	  top: 0;
+	  left: 0;
+	  bottom: 0;
+	  right: 0;
+	  position: absolute;
+	  z-index: -1;   
+      }*/
+      
+* {
+    box-sizing: border-box;
+}
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+/* Clearfix (clear floats) */
+.images::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+.lb{ 
+    text-align:left; 
+    font-size: 14px;
+    font-weight: normal; color: #4c4c4c;
+    //font-family: Verdana;
+    position: relative; 
+}
+
+input[type="radio"], select {
+    margin-left: -20px;
+}
+
+.sidenav {
+    width: 0;
+    height: 440px;
+    position: fixed;
+    z-index: 10000;
+    bottom:10px;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    overflow-y: true;
+    transition: 0.5s;
+    padding-top: 60px;
+    opacity: 1;
+    border-style: solid;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+       
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    left: -65px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.sidenav .openbtn {
+    position: absolute;
+    top: 0;
+    left: -65px;
+    font-size: 36px;
+    margin-left: 40px;
+}
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.easy-autocomplete-container { max-height:150px; overflow:scroll; }
+.box {
+
+    float: left;
+    width: 100%;
+    padding: 20px;
+    background: #eee;
+    box-sizing: border-box;
+    /*background-color:white;*/
+}
+
+
+
+a {
+font-size:11px;
+
+}
+#ansichten label {
+margin-bottom:-10px;
+}
+
+
+.bearbeiten {
+	font-size:13px;
+	background:none;
+	opacity:0.7; 
+	color: black;
+	height: auto;
+	max-width: 140px;
+	margin-bottom:10px;
+	
+}
+  
+.erweitert {
+        color:black;
+	border: none;
+	padding: 0;
+	font-size:20px;
+	background: none;
+	margin-right:10px;
+}
+
+.shape {
+      margin-left: 4em;
+      margin-top: 2.5em;
+      height: 8em;
+      width: 8em;
+      box-shadow: 4px 4px 8px;
+      color: #ccc;
+      background-repeat: no-repeat;
+      background-size: 90%;
+      background-position: 50%;
+}
+.circle, .pill {
+    border-radius: 8em;
+}
+.pill, .rectangle {
+    width: 16em;
+}
+.square, .circle {
+    margin-left: 9em;
+    }
+.border {
+    border: 2px solid #333333;
+}
+.toggles {
+    width: 200px;
+}
+.toggle-wrap, .shape {
+    display: inline-block;
+    vertical-align: top;
+}
+.controls {
+    background: #ccc;
+    padding: 1em;
+    display: inline-block;
+}
+
+textarea {
+    min-height:30px;
+    height:35px;
+    width:200px;
+}
+
+.suchen {
+	font-size: 12px;
+	background:beige;
+	opacity:0.7;
+	color: black;
+	max-width: 140px;
+	margin-left:20px;
+}
