@@ -15,7 +15,7 @@ Da sowohl der komplette Quellcode als auch die verwendeten Bibliotheken frei ver
 
 ## Mitmachen
 
-Bei Fragen und Anregungen gerne an Gordon Fischer (gfischer@bbaw.de) oder Anja Gerber (anja.gerber@bbaw.de)
+Bei Fragen und Anregungen gerne an Gordon Fischer (gfischer@bbaw.de) oder Anja Gerber (anja.gerber@bbaw.de) schreiben. 
 
 ## Lizenzen Programmcode und Dokumentation
 
