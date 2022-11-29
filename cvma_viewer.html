@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+     <title>Digitaler Ressourcen Manager</title>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="dist/css/select2.min.css" />
+     <link rel='stylesheet' href='//cdn.jsdelivr.net/foundation/5.0.2/css/foundation.min.css'>
+     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
+     <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
+     <link href="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css" rel="stylesheet">
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <script type="text/javascript" src="js/w2ui.js"></script>
+     <link rel="stylesheet" type="text/css" href="css/w2ui.css" />
+     <script type="text/javascript" src="dist/js/select2.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+     <link rel="stylesheet" type="text/css" href="css/Bildbearbeitung3.css" />
+     <script src="js/Functions3.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+  </head>
+  <body>
+    
+    <!-- ###############-->
+    <!--    MAIN MENU   -->
+    <!-- ###############-->
+    <script>
+      var standard="";
+      var parameters = getParameters();
+      var singlevalue=0;
+    </script>
+    <!-- MENU END -->
+    <div id="layout" style="width: 100%; height: 1000px;"><h2>Daten werden geladen...</h2></div>
+    <div id="einfuehrung" style="position:relative; display:flex;">
+      <label style="margin-left:30px; margin-right:30px;" id="admin"></label>
+      <label style="margin-left:30px; margin-right:30px;" id="usermenu"></label>
+      <textarea placeholder="Suche" style="resize: both; overflow: auto;" id="suche"></textarea><button style="color:black; left: 20px; font-size:2em;" onclick="Volltextsuche();"> ✔</button><button style="color:black; left:30px;font-size:2em;" onclick="ClearVolltext();">✗</button>
+    </div>
+    <div id="abfrage"  style="left: 140px; top: -50px; position:relative;" class='row'>
+      <div class='medium-12-columns'>
+      </div>
+      <br/> 
+      <br/>
+      <div id="container" style="left: 100px; position: relative;">
+	<br/>
+	<div class="col-md-4"><div id='d1' style="position:absolute;"></div></div>
+      </div>
+    </div>
+</div>
+<div class="mom">
+</div>
+<div style="position:relative; width:100%;">
+</div>
+<script>
+  let aktuelleFelder=[];
+  let menu=true;
+  $("#eac-container-autocomplete").css("max-height","150px;")
+  var gal="false"
+  var parameters = getParameters();
+  var currentfile=parameters.datafile.replace("data/","");
+  
+  function CallReturnData(var1) {
+      let pwd = prompt("Passwort eingeben", "");
+      if (pwd=="cvma2022") {
+	  ReturnData(currentfile, var1)
+      }
+      else {alert("Passwort falsch")}
+  }
+</script>
+
+<div id="allgemein" style="position:relative; width: 1200px; height: 1000px; overflow-y: scroll;">
+  <button title="Hauptmenu" class="erweitert" onclick="closeNav();">⌂</button>
+  <button title="Auswahl- und Bearbeitungsmenu" class="erweitert" onclick="$('.menu1, #filtermenu, #bearbeitung').show(); $('.menu2,.menu3,  #allmeta ,#hauptmenu').hide(); ShowMenu(); menu=true">Menu</button>
+  <button title="Tabellenbearbeitung" class="erweitert" onclick="$('.menu3,#bearbeitung').show(); $('#hauptmenu,#filtermenu,#changed1').hide(); PrepareTable();">Table</button>
+  <button title="Einzelbildbearbeitung" class="erweitert" onclick="$('.menu1, #filtermenu,#bearbeitung').show(); $('.menu2,.menu3,#allmeta,#hauptmenu').hide(); SingleView(); menu=false">Single</button>
+  <form id='f2'>
+    <table style="position:relative; left: 15px; border: None; background-color: #f2f2f2;">
+</tr>
+</table>
+</form>
+
+<!-- Hauptmenu -->
+<div id="hauptmenu">
+  <div id="tabellenbearbeitung">
+    <button class="dropdown-item" onclick="connectRecords();">Verknüpfe ausgewählte(s)<br/> Forschungsobjekt(e)</button>
+    <button class="dropdown-item" onclick="deconnectRecords();">Trenne ausgewählte(s)<br/> Forschungsobjekt(e)</button>
+    <button class="dropdown-item" onclick="addRecord();">Neues Forschungsobjekt</button>
+    <button class="dropdown-item" onclick="removeRecords();">Lösche ausgewählte(s)<br/> Forschungsobjekt(e)</button>
+  </div>
+  <div id="ansichten">
+    <label>Tabellenansichten</label><br/>
+    <a class="dropdown-item" onclick="details='false';  $('#grid2').hide(); $('#grid1').css('width','1500px'); $('#images').css('width','100%'); w2ui['grid1'].recordHeight = 150; w2ui['grid1'].showColumn('Photo');" href="#">Bilder an</a>
+    <a class="dropdown-item" onclick="details='false';  $('#grid2').hide(); $('#grid1').css('width','1500px'); $('#images').css('width','100%'); w2ui['grid1'].recordHeight = 28; w2ui['grid1'].hideColumn('Photo');" href="#">Bilder aus</a>
+  
+    <hr>
+  
+	<label> Ausgewählte Bilder exportieren </label><br/>
+	<a id='save1' class='dropdown-item' onclick='ReturnImages("tif");'>Original Tiff(s)</a>
+	<a id='save2' class='dropdown-item' onclick='ReturnImages("jpg");'>JPG(s) Derivate</a>
+	<a id='save3' class='dropdown-item' onclick='ReturnImages("thumbs");'>Thumb(s) (JPG)</a>
+	<hr>
+	<label id="currentmeta"> Aktuelle Metadaten</label><br/>
+	<a target="_blank" class='dropdown-item' href="" style="cursor:pointer;" id="savecurrent">Daten runterladen</a>
+	<hr>
+	<script>
+	  var meta = document.getElementById("savecurrent");
+	  meta.setAttribute("href", "https://telotawebdev.bbaw.de/cvma/"+parameters.datafile);
+	</script>
+	<div>
+	  <label style="font-size:18px;"> Administrativer Bereich </label><br/>
+	  <a  class='dropdown-item'  id='repositorium' href='https://gitup.uni-potsdam.de/TELOTA/cluster-alte-welt/corpusvitrearummediiaevi/tree/master/digitalresources' target='_blank' class='tiny'>Git-Repositorium</a>	
+	  <a  class='dropdown-item' id='monitoring'  onclick='Monitoring()'>Projekt validieren</a>
+	  <a  class='dropdown-item' id='dokumentation' onclick='Dokumentation()'>Dokumentation</a>
+	  <a  class='dropdown-item' id='projectneu' onclick='Registration()' target='_blank' class='tiny'>Neue Bilder registrieren</a>
+	  <br/>
+	  <br/>
+	</div>
+  </div>
+</div>
+<!-- Bearbeitungsbereich -->
+<div id="bearbeitung">
+  <div>
+    <div class="menu1">
+      <span style="margin-bottom:20px;" id='ex1'>
+	<a id="ex1link" href="" target="_blank" style="right:0px;">
+        <img id="ex1image" src='' height='350' alt=''/></a>
+      </span>
+      <!--<span style="width:120px; left:20px; position:relative;" id="werteliste"></span>-->
+      	 <button style="margin-left:10px;" id='save' class='btn btn-secondary' onclick='CallReturnData("metadata")'>Metadaten speichern</button>
+	 <button style="margin-left:10px;" id='save' class='btn btn-secondary' onclick='CallReturnData("exif")'>Bild(er) überschreiben</button>
+	 <div id="selectmenu" style="height:auto; top:15px; position:relative;"><label id="feldauswahl" style="margin-left:10px; font-size: 12px;">Wähle Feld(er) aus</label>
+	   <select onclick="ShowFilter()" style="left:30px; position:relative; width:300px; margin-right:20px; margin-bottom:20px; font-size:11px; background-color:#FFFAF0;" id="changed1"></select>
+      </div>
+	 <script>
+
+	  
+	   function ShowMenu() {
+	       console.log("Table selection: ", w2ui["grid1"].getSelection()) 
+	       $('#ex1').css("display","none");
+	       $('div[id^="div"]').css("display", "none");
+	       $('#changed1,#feldauswahl').css("display", "block");
+	       $('div[id^="div"]').css("height", "5em");
+	       $('.hideFilter').css("display", "block");
+	       $('#filtermenu').css("display", "block");
+	       $('input[id^="logic"], input[id^="modification"], .labels').css("display","block");
+	       w2ui["grid1"].multiSelect = true;
+	       //w2ui['grid1'].selectNone();
+	   };
+	   function PrepareTable() {
+	       
+	       w2ui["grid1"].multiSelect = false;
+	       $('#ex1').css("display","none");
+	       $('div[id^="div"]').css("display", "none");
+	   };
+	   function ShowFilter() {
+	       var selectedvalue=document.getElementById("changed1").value;
+	       if (selectedvalue!="subject") {
+		   aktuelleFelder.push(selectedvalue);
+		$("#div"+selectedvalue).css("display", "block");
+	       }
+	   };
+	   function HideFilter(var1) {
+	       aktuelleFelder = aktuelleFelder.filter(function(e) { return e !== var1 })
+	       $("#div"+var1).css("display", "none");
+	   };
+	 </script>
+	 <div class="menu2">
+	   <button id="chg8" class='bearbeiten' onclick="TransferMetadata('show')" style="margin-left: 5px; height: 14px;">Vergleiche!</button>
+	 </div>
+	 <div class="menu3" style="margin-left:10px;">
+	   <div style="font-size:15px;position:flex;">Aufnahme<button onclick="$('#Aufnahme').css('display', 'block');">&#8595;</button><button onclick="$('#Aufnahme').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Aufnahme"></div></div>
+	   <div style="font-size:15px;position:flex;">Allgemein<button onclick="$('#Allgemein').css('display', 'block');">&#8595;</button><button onclick="$('#Allgemein').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Allgemein"></div></div>
+	   <div style="font-size:15px;position:flex;">Iconclass<button onclick="$('#Iconclass').css('display', 'block');">&#8595;</button><button onclick="$('#Iconclass').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Iconclass"></div></div>
+	   <div style="font-size:15px;position:flex;">Rechte<button onclick="$('#Rechte').css('display', 'block');">&#8595;</button><button onclick="$('#Rechte').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Rechte"></div></div>
+	   
+	   <div style="font-size:15px;position:flex;">Ort<button onclick="$('#Ort').css('display', 'block');">&#8595;</button><button onclick="$('#Ort').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Ort"></div></div>
+	   <div style="font-size:15px;position:flex;">Freigabe Hinweise<button onclick="$('#Freigabe_Hinweise').css('display', 'block');">&#8595;</button><button onclick="$('#Freigabe_Hinweise').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Freigabe_Hinweise"></div></div>
+	   <div style="font-size:15px;position:flex;">Fenster und Scheiben<button onclick="$('#Scheibe_Fenster').css('display', 'block');">&#8595;</button><button onclick="$('#Scheibe_Fenster').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Scheibe_Fenster"></div></div>
+	   <div style="font-size:15px;position:flex;">Körperschaften<button onclick="$('#Personen_Koerperschaften').css('display', 'block');">&#8595;</button><button onclick="$('#Personen_Koerperschaften').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Personen_Koerperschaften"></div></div>
+	   <div style="font-size:15px;position:flex;">Informationen<button onclick="$('#Info').css('display', 'block');">&#8595;</button><button onclick="$('#Info').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Info"></div></div>
+	   <div style="font-size:15px;position:flex;">Sonstige Felder<button onclick="$('#Restecontainer').css('display', 'block');">&#8595;</button><button onclick="$('#Restecontainer').css('display', 'none');">&#8593;</button><div class="tablefilter" id="Restecontainer"></div></div>
+	 </div>
+	 <div id="allmeta" style="top:20px; left:0px;position:relative;" class="box">
+	   <div style="display:flex; position:relative;">
+	     <p style="position:relative; font-size:12px;" id="currentmetadata1"></p>
+	     <p style="position:relative; font-size:12px;" id="currentmetadata2"></p>
+      </div>
+	   
+    </div>
+    <div id="filtermenu" style="position:relative; margin-left:2px; margin-top:15px;">
+     
+      <!--<h4 style="left:20px;"> Filtermenu </h4>-->
+      <div class="child" style="position:relative; top:-5px;">
+	<button title="Alle Treffer anzeigen" id='execute4' class='suchen' onclick="Search()" style="margin-left: 10px;">Results</button>
+	<button title="Suche deaktivieren" id='search' class='suchen' onclick="w2ui['grid1'].searchReset(); multisearchArray=[]; currentfilter=[];   w2ui['layout'].sizeTo('top', 75);">Reset</button>
+	<button title="Suchergebnisse abspeichern" id='searchmenu' class='suchen' onclick="GetURL()">Save</button>
+	<br/>
+
+      </div>
+      <br/>
+      
+    </div> <!--end Filtermenu -->
+    </div>
+    
+    <script>
+      var sel = $('<select id="mySelect" style="width:300px; position:relative;">').appendTo('#admin');
+      $(arr).each(function() {
+	  sel.append($("<option>").attr('value',this.val).text(this.text));
+      });
+      
+      $('#mySelect').on('change', function() {
+	  var value = $(this).val();
+	$(location).prop('href', 'https://telotawebdev.bbaw.de/cvma/fotomanager?project=cvma&menu=data/project_cvma_2022.json&datafile=data/'+value)
+      });
+      
+    var sel = $('<select id="myMenu" style="width:300px; position:relative;">').appendTo('#usermenu');
+    $(arrmenu).each(function() {
+	sel.append($("<option>").attr('value',this.val).text(this.text));
+    });
+    
+    $('#myMenu').on('change', function() {
+      var value = $(this).val();
+      const myArray = value.split(",");
+      //console.log(myArray)
+      w2ui['grid1'].updateColumn(hidecolumns, { hidden: !0 });
+      w2ui['grid1'].updateColumn(myArray, { hidden: 0 });
+  });
+  
+  var view="standard"
+  function openNav() {
+      $("#bearbeitung").css("height","1000px;");
+      $("#bearbeitung").css("width","1000px;");
+      $("#bearbeitung").css("overflow-y","scroll");
+      $("#bearbeitung").show();
+      $("#hauptmenu").hide();
+  };
+  
+  function closeNav() {
+      $("#bearbeitung").css("overflow-y","hidden");
+      $("#bearbeitung").hide();
+      $("#hauptmenu").show();
+  };
+
+  $(".closebtn").hide()
+  $(".menu2,.menu3").hide()
+  $("#allmeta, #notizen").hide()
+  $("#grid2").hide()
+  $("#images").hide()
+  $("#main").hide()
+  $('#tableshide').hide();
+  $('#imagehide').hide();
+  $('#imagegalleryhide').hide();
+  $("#bearbeitung").hide();
+  
+    
+  $( "#currentfile" ).append( "<label>"+parameters.datafile.replace("data/", "")+"</label>" );
+  var details='false'
+  
+  // hole die Verwaltungsdatei und setze die Begleittexte
+  var mappingfull=[]
+  var mapping=[]
+  if (parameters.project=="cvma") {
+      mappingfull=$.parseJSON(getValue(parameters.menu))
+      mapping=mappingfull["Keys"]
+      //console.log("Standardliste")
+      //console.log(mgpping)
+      //console.log(mappingfull["Metadaten"]["Standardliste"])
+  };
+
+  function InitialMenu() {
+      $( document ).ready(function() {
+	  var currentattribute=[];
+	  $.each(mapping, function( index, value) {
+	      currentattribute=[];
+	      $("#changed1").append(new Option(value["Mapping"], index));
+	      $('<div id="div'+index+'" style="display:none; margin-bottom:3px; height:60px;"><div style="display:flex; bottom:12px;"><label style="font-size:15px;">'+value['Mapping']+'</label><button style="margin-left:10px; color:gray; font-size:1.3em; bottom:12px;" id="expert'+index+'" onclick="ExpertModus(\''+index+'\',\'on\')">show &#10230;</button><button style="margin-left:10px; color:gray; font-size:1.3em; display:none; bottom:16px;" id="closeexpert'+index+'" onclick="ExpertModus(\''+index+'\',\'off\')">&#10229; hide</button><span id="lab'+index+'" ></span></div><div style="display:flex; top:-20px; position:relative;"><button class="hideFilter" style="color:black; font-size:1.8em; bottom:12px;" onclick="HideFilter(\''+index.toString()+'\')">✗</button><select id='+index+' onclick="" style="margin-left:20px; width:250px;"></select><input style="color:black; position:relative; bottom:16px; font-size:1.2em; margin-left:15px;" type="checkbox" id="logic'+index+'"><label class="labels" style="margin-left:5px;">exakt</label></input><button title="Teilstrings ersetzen" id="chg2" class="bearbeiten" style="bottom:12px; left:20px;"  onclick="ChangeValue(\'new\',\''+index+'\')" >Change</button><span style="position:relative; left:30px;"> | </span><button title="letzte Änderung verwerfen" id="change4" style="left:40px; bottom:12px;" class="bearbeiten" onclick="ChangeValue(\'reset\',\''+index+'\')" >RLC</button><span style="position:relative; left:50px;"> | </span><button title="letzten gespeicherten Wert übernehmen" id="change5" style="left:60px; bottom:12px;" class="bearbeiten" onclick="ChangeValue(\'lastsave\',\''+index+'\')" >LSV</button></div></div>').appendTo('#selectmenu');
+
+	      $.each(createmenu, function( index1, value1) {
+		  if (value1!=undefined) {
+		      currentattribute.push(createmenu[index1][index])
+		  };
+	      });
+	      currentattribute=unique(currentattribute);
+	      //console.log(currentattribute)
+	      var currentattributesjson=[];
+	      if (mapping[index].hasOwnProperty('Auswahlliste')) {
+		  $.each(mapping[index]['Auswahlliste'], function( index2, value2) {
+		  currentattributesjson.push({"name":value2})
+	      });
+	      }
+	      else {
+		  $.each(currentattribute, function( index3, value3) {
+		      
+		     if(value3!=undefined) {
+			  currentattributesjson.push({"name":value3})
+		      }
+		      else {
+			  currentattributesjson.push({"name":"kein Wert eingetragen"})
+		      }
+		  });
+	      };
+	      
+	      var listsort=[];
+	      $.each(currentattributesjson.sort(), function( index4, value4) {
+		  listsort.push(value4["name"]);
+	      });
+
+	      
+	      $.each(listsort.sort(), function( index5, value5) {
+		  if (value5!=undefined) {
+		      $('#'+index).append($('<option>', {
+			  value: value5.toString(),
+			  text: value5.toString()
+		      }))};
+	      });
+	      
+	      $('#'+index).editableSelect();
+	   
+	  });
+	  
+	  var options = $("#changed1 option");                // Collect options         
+	  options.detach().sort(function(a,b) {               // Detach from select, then Sort
+	      var at = $(a).text();
+	      var bt = $(b).text();         
+	      return (at < bt)?1:((at > bt)?-1:0);            // Tell the sort function how to order
+	  });
+	  
+	  console.log("Sorted")
+	  //console.log(options) 
+	  options.appendTo("#changed1");  
+      });
+  };
+      
+      InitialMenu();
+      var fields=[];
+      
+      //Definiere das Tabellenmenu:
+      //console.log(startmenu["Startmenus"]["Standard"]) 
+      $.each(mappingfull["Keys"], function( index, value ) {
+	  fields.push('#'+value["Group"]);
+	  //console.log("TABELLE")
+	  //console.log(index)
+	  let opacity=1
+	  if ($.inArray(index, startmenu["Startmenus"]["Standard"]) !== -1){
+	      opacity=1;
+	  }
+	  else
+	  {
+	      opacity=0.4;
+	  }
+
+	  $('#'+value["Group"]).append(
+	      '<br/><button title='+index+' value="off" id="table'+index+'" style="font-size:14px; color:blue; opacity:'+opacity+';" onclick="UpdateTable('+index+')">'+value["Mapping"]+'</button>'
+	  )
+	  
+	  
+      });
+      
+    function UpdateTable(var1)
+    {
+	if($("#table"+var1.id).val()=="off")  {
+	    //console.log(var1)
+	    $("#table"+var1.id).css("opacity","1");
+	    $("#table"+var1.id).val("on");
+	    w2ui['grid1'].updateColumn(var1.id, { hidden: 0 });
+	    w2ui["grid1"].refresh();
+	    return;
+	};
+
+	if($("#table"+var1.id).val()=="on")  {
+	    $("#table"+var1.id).css("opacity","0.4");
+	    $("#table"+var1.id).val("off");
+	    w2ui['grid1'].updateColumn(var1.id, { hidden: !0 });
+	    w2ui["grid1"].refresh();
+	    return;
+	};
+    };
+   
+    
+  var sel=[]
+  var createmenu=[]//$.parseJSON(getValue('data/cvma.json'))
+  
+    
+  var options = $("#changed1 option");                // Collect options         
+  options.detach().sort(function(a,b) {               // Detach from select, then Sort
+      var at = $(a).text();
+      var bt = $(b).text();         
+      return (at > bt)?1:((at < bt)?-1:0);            // Tell the sort function how to order
+  });
+  options.appendTo("#changed1");                      // Re-attach to select
+  
+  //############################
+  // G R I D (MAIN FUNCTION)   #
+  //############################
+    var metadata_liste=""
+  //var columnsval=[{ field: 'Photo', caption: 'Photo', sortable: true, size: '300px', attr: 'align="center"'}, { field: 'IconclassMotiv', caption: 'Beschreibung', sortable: true, size: '200px', attr: 'align="center"'}, { field: 'IconclassKey', caption: 'Keywords', sortable: true, size: '200px', attr: 'align="center"'}]
+  
+
+  var columnsval=[{ field: 'Photo', caption: 'Photo', sortable: true, size: '300px', attr: 'align="center"'}] //, { field: 'IconclassCategory', caption: 'Kategorie (aus Iconclass)', sortable: true, size: '200px', attr: 'align="center"'}, { field: 'IconclassMotiv', caption: 'Beschreibung (aus Iconclass)', sortable: true, size: '200px', attr: 'align="center"'}, { field: 'Neuer_Dateiname', caption: 'Neuer Dateiname',  tooltip: "wenn der Dateiname geändert werden soll, dann bitte hier den neuen Namen der Datei eintragen", sortable: true, size: '100px', attr: 'align="center"', style: 'color: red;'}]
+    var columnsimg=[{ field: 'Photo', caption: '', sortable: true, size: '25%', attr: 'align="center"'}]
+  
+    var recordsval=[]
+    var searchval=[]
+    var hidecolumns=[]
+    var recordsimg=[]
+    var recordsimgklein=[]
+    var recordsimgmittel=[]
+    var recordsimghoch=[]
+    var counter=0
+
+
+    function showChanged() {
+    w2popup.open({
+        title: 'Records Changes',
+        with: 600,
+        height: 550,
+        body: `<pre>${JSON.stringify(w2ui.grid1.getChanges(), null, 4)}</pre>`,
+        buttons: '<button class="w2ui-btn" onclick="w2popup.close()">Ok</button>'
+    })}
+
+    
+    function unique(list) {
+    var result = [];
+    $.each(list, function(i, e) {
+        if ($.inArray(e, result) == -1) result.push(e);
+    });
+    return result;
+    }
+    
+  function CreateGrid(var1,var2) {
+
+      const datalist=var1.split(",");
+      metadata_liste=$.parseJSON(getValue(datalist[0]))
+      $.each(datalist, function( index, value ) {
+	  metadata_liste = $.extend(true, {}, metadata_liste, $.parseJSON(getValue(value)));
+      })
+
+      $("#tabellenbearbeitung").hide()
+      //create filter menu
+	createmenu=metadata_liste
+      $.each(mapping, function( index, value ) {
+	  var tempmenu=[]
+	  $.each(metadata_liste, function( i, v ) {
+	      tempmenu.push(metadata_liste[i][index])
+	  });
+	  //, style: 'color: red;'
+	  if (index=="Notizen" || index=="Neuer_Dateiname"){
+	      columnsval.push({"field": index, "caption": value["Mapping"], "size": "2%", "sortable": "true", tooltip: "Exifkey: "+index+"\nAnmerkung: "+value["Anweisungen"], style: 'color: red;'})}
+	  else {
+	      columnsval.push({"field": index, "caption": value["Mapping"], "size": "2%", "sortable": "true", tooltip: "Exifkey: "+index+"\nAnmerkung: "+value["Anweisungen"]})};
+	  searchval.push({"field": index, "caption": value["Mapping"], "type": "list",  options: { items: unique(tempmenu)}})
+	  hidecolumns.push(index.toString()) 
+	  counter=counter+1
+      });
+      columnsval.unshift({ field: 'recid', caption: 'ID', size: '35px' ,attr: 'align="center"'})
+      var imagecounter=0
+      var icondict={}
+      var iconclass_liste=$.parseJSON(getValue('iconclass_deutsch_komplett.json'))
+      var myData="";
+      $.each(metadata_liste, function( index, value ) {
+	  Object.keys(metadata_liste[index]).map(
+	      function(object){
+		  metadata_liste[index]["recid"]=index
+		  var thumbs=value["SourceFile"].lastIndexOf("/")
+		  var thumbsfile=value["SourceFile"].substring(0,thumbs)+"/thumbs"+value["SourceFile"].substring(thumbs);
+		  //console.log("thumbs: ", thumbsfile.trim())
+		  metadata_liste[index]["Photolight"]="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/"+thumbsfile.replace('/opt/SILO/cvma/','')+"&dh=250";
+		  metadata_liste[index]["Photo"]='<a href="https://digilib.bbaw.de/digitallibrary/digilib.html?fn=projects/cvma/'+value["SourceFile"].replace("/opt/SILO/cvma/", "")+'" target="_blank">' +
+		      '<img src="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/'+thumbsfile.replace("/opt/SILO/cvma/","")+'&dh=150" alt="" style="margin:2px;" loading="lazy"/></a>'
+		  
+		  if (value["IconclassNotation"]==undefined || value["IconclassNotation"]=="" ) {
+			metadata_liste[index]["IconclassMotiv"]='<span> Wert leer oder nicht gefunden</span>'
+		  }
+		  else {
+		      if ($.type(value["IconclassNotation"]) == "array")
+		      {
+			  var iconclass=[];
+			  var iconclassshort=[];
+			  $.each(value["IconclassNotation"], function( i, v ) {
+			      iconclass.push('<a target="_blank" href="https://iconclass.org/de/'+v+'"><span style="font-size:10px; color:black;">  '+v+'-> </span>'+iconclass_liste[v]+'   </a>')
+			      iconclassshort.push('<a target="_blank" href="https://iconclass.org/de/'+v.substring(0,3)+'"><span style="font-size:10px; color:black;">  '+v.substring(0,3)+'-> </span>'+iconclass_liste[v.substring(0,3)]+'</a>')
+			  })
+			  metadata_liste[index]["IconclassMotiv"]=iconclass.join(" | ");
+			  try  {
+			      
+			      metadata_liste[index]["IconclassCategory"]=iconclassshort.join(" | ");
+			      
+			  }
+			  catch(err) {
+			      metadata_liste[index]["IconclassCategory"]='<span> Wert leer oder nicht gefunden</span>'
+			  }
+		      }
+		      else {
+			  metadata_liste[index]["IconclassMotiv"]='<a target="_blank" href="https://iconclass.org/de/'+value["IconclassNotation"]+'">'+iconclass_liste[value["IconclassNotation"]]+'</a>'
+			  try {
+			      metadata_liste[index]["IconclassCategory"]='<a target="_blank" href="https://iconclass.org/de/'+value["IconclassNotation"].substring(0, 3)+'">'+iconclass_liste[value["IconclassNotation"].substring(0, 3)]+'</a>'}
+			  catch(err) {
+			      metadata_liste[index]["IconclassCategory"]='<span> Wert leer oder nicht gefunden</span>'
+			  }
+			  
+			    
+		      }
+		  }
+	
+		  
+	      });
+	  
+	  var counters1=imagecounter
+	  var counters2=imagecounter+1
+	  var counters3=imagecounter+2
+	  var counters4=imagecounter+3
+	  imagecounter=imagecounter+4
+	  recordsval.push(metadata_liste[index])
+	  recordsimg.push({recid:index,  Photo: 
+			   '<figure><img src="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'&dh=110" alt="" /><figcaption style="font-size:10px; padding-top:7px;">'+metadata_liste[index]["Creator"]+'</figcaption></figure></a><br/><a style="font-size:10px;" href="https://digilib.bbaw.de/digitallibrary/digilib.html?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'" target="_blank" >'+metadata_liste[index]["FileName"]+'<br/><br/>'})
+	  
+	  recordsimgklein.push({recid:index, Filename: metadata_liste[index]["FileName"] , Photo: 
+				'<figure><img src="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'&dh=200" alt="" /><figcaption style="font-size:10px; padding-top:7px;">'+metadata_liste[index]["Creator"]+'</figcaption></figure></a><br/><a style="font-size:10px;"  href="https://digilib.bbaw.de/digitallibrary/digilib.html?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'" target="_blank" >'+metadata_liste[index]["FileName"]+'<br/><br/>'})
+	  
+	  recordsimgmittel.push({recid:index,  Photo: 
+				 '<figure><img src="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'&dh=350" alt="" /><figcaption style="font-size:10px; padding-top:7px;">'+metadata_liste[index]["Creator"]+'</figcaption></figure></a><br/><a style="font-size:10px;"  href="https://digilib.bbaw.de/digitallibrary/digilib.html?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'" target="_blank" >'+metadata_liste[index]["FileName"]+'<br/><br/>'})
+	  
+	  recordsimghoch.push({recid:index,  Photo: 
+			       '<figure><img src="https://digilib.bbaw.de/digitallibrary/servlet/Scaler?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'&dh=500" alt="" /><figcaption style="font-size:10px; padding-top:7px;">'+metadata_liste[index]["Creator"]+'</figcaption></figure></a><br/><a style="font-size:10px;"  href="https://digilib.bbaw.de/digitallibrary/digilib.html?fn=projects/cvma/'+metadata_liste[index]["SourceFile"].replace("/opt/SILO/cvma/", "")+'" target="_blank" >'+metadata_liste[index]["FileName"]+'<br/><br/>'})
+	  });
+      
+      $(function () {
+	  if (w2ui['grid1'] != null) {
+	      w2ui['grid1'].reset();
+	      w2ui['grid1'].destroy();
+	  }
+	    
+	  $('#grid1').w2grid({
+	      name    : 'grid1',
+	      //recordHeight : 26,
+	      //selectType : 'cell',
+	      show: {
+		  header: false,
+		  toolbar: false,
+		  footer: true,
+		  //toolbarSave: true,
+		  selectColumn: true,
+		  toolbarSearch: false,
+		  toolbarInput:false
+	      },
+	      
+	      lineNumbers : true,
+	      reorderRows: true,
+	      sortData: [ { field: 'recid', direction: 'asc' } ],
+	      multiSelect: true,
+	      reorderColumns: true,
+	      multiSearch: false,
+	      
+	      //searches: searchval,
+	      columns: columnsval,
+	      records: recordsval,
+	      onClick: function (event) {
+		  singlevalue=event.recid;
+		  if (menu!=true) {
+		      SingleView(event.recid);
+		  };
+	      }
+	  });
+	  
+	  w2ui['grid1'].updateColumn(mappingfull["Metadaten"]["Standardliste"], { hidden: !0 });
+	  w2ui['grid1'].hideColumn("Photo","Neuer_Dateiname");
+	  w2ui['grid1'].updateColumn(var2, { hidden: 0 });
+	  //w2ui['grid1'].showColumn("Identifier", "Creator", "IconclassNotation", "IconclassCategory", "IconclassMotiv", "PhotographicType", "LocationCreatedCity", "RestorationHistory");
+       });
+
+     
+  };
+  
+  var emptyval=[]
+
+      CreateGrid(parameters.datafile,startmenu["Startmenus"]["Standard"]);
+    
+  $(function () {
+      var pstyle = 'border: 1px solid #dfdfdf; padding: 5px; overflow-y:hidden; overflow-x: scroll; ';
+      var pstylemain = 'height: 1200px; border: 1px solid #dfdfdf; padding: 5px;';
+      var pstyleleft = 'width: 800px; height: 800px; border: 1px solid #dfdfdf; padding: 5px; overflow-y:scroll;';
+      var pstyletop = 'width: 100%; height: 240px; border: 1px solid #dfdfdf; padding: 5px;';
+	$('#layout').w2layout({
+            name: 'layout',
+            panels: [
+		{ type: 'top',  size: 55, resizable: true, style: pstyle, content: 'top' },
+		{ type: 'left', size: 350, resizable: true, style: pstyle, content: 'left' },
+		{ type: 'main', size: 300, resizable: true, style: pstyle, content: 'main' }
+            ]
+	});
+      
+    });
+  
+  $(function () {
+      
+      w2ui.layout.html('left',  {
+	  render: function() {
+	      $(this.box).empty();
+	      $(this.box).append($('#allgemein').show());
+	  }});
+      
+      w2ui.layout.content('top',  {
+	  render: function() {
+	      $(this.box).empty();
+	      $(this.box).append($('#einfuehrung').show());
+	  }});
+
+      w2ui.layout.html('main',  w2ui['grid1']);
+      // in memory initialization
+      //$().w2grid(config.grid2);
+      
+  });
+
+  $('#download').click(handler1).blur(handler1).change(handler1);
+  
+  function handler1 (ev) {
+      eval($(this).val())
+  }
+
+  function closeDetail() {
+
+      details='false';
+      $('#grid2').hide();
+      $('#grid1').css('width','500px');
+      w2ui['layout'].toggle('right', window.instant);
+      w2ui.grid1.multiSelect = true;
+  }
+  
+    
+  function addRecord() {
+      var g = w2ui['grid1'].records.length;
+      //console.log(emptyval)
+      w2ui['grid1'].add( { recid: g + 1, emptyval } );
+  }
+  
+  function runSingleView(var1, var2, var3) {
+	if (var2=="Link") {
+	    window.open(var1, "_blank")}
+	else {
+	    
+	    window.open("http://localhost:8000/singleview.html?typ="+var3["Typ"]+"&objekt="+var3["Objekt"]+"&zeit="+var3["Zeit"]+"&hinweis="+var3["Hinweise"]+"&person="+var3["Personen"], "_blank")
+	    
+	}
+      
+  }
+ 
+  
+  </script>
+</body>
+</html>
