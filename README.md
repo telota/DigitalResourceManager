@@ -1,4 +1,4 @@
-# DigitalResourceManager  
+# Digitaler Ressourcen Manager  
 
 Das Corpus Vitrearum Medii Aevi (CVMA) Deutschland ist ein interakademisches Forschungsvorhaben mit  Arbeitsstellen in Freiburg (AdWL) und Potsdam (BBAW) sowie als Teil des Internationalen Corpus Vitrearum Participant der NFDI4Culture. Seine Aufgaben sind die Erfassung und Erschließung mittelalterlicher Glasmalereien in Deutschland. Nach wissenschaftlichen Grundsätzen erstellte fotografische Aufnahmen bilden die Basis der Dokumentations- und Erschließungsarbeit. Sie werden neben der Veröffentlichung in  Corpusbänden als nachnutzbare Forschungsdaten auf der Website des CVMA Deutschland publiziert (http://corpusvitrearum.de) und mit Metadaten angereichert. 2015 wurde durch die Arbeitsstellen des CVMA, die Digitale Akademie Mainz und TELOTA - IT/DH der BBAW eine XMP-Spezifikation für die Annotation der Digitalisate verabschiedet (https://corpusvitrearum.de/cvma-digital/spezifikationen/cvma-xmp/11.html).   
 
