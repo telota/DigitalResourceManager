@@ -6,3 +6,20 @@ CVMA und TELOTA entwickeln eine webbasierte Lösung, die sämtliche Komponenten 
 Die Konfiguration des DRM wird niedrigschwellig über extern einzulesende Dateien gestaltet. Anpassungen der Anzeige entsprechend eigener Bedürfnisse, das Erstellen von Auswahllisten und eine Einbindung von kontrolliertem Vokabular lassen sich so realisieren. Durch Veränderung der Serververknüpfungen kann der DRM auf jedem Server laufen.   
 Der DRM soll online verfügbar sein, um gemeinsames Arbeiten und mobile Recherche zu ermöglichen. Die bearbeiteten Metadatensätze sollen versioniert vorgehalten werden, um die Risiken von Wissensverlust zu minimieren.  
 Da sowohl der komplette Quellcode als auch die verwendeten Bibliotheken frei verfügbar sind, können diese an die Anforderungen Dritter angepasst werden. Der Quellcode wird auch in Git-Repositorien publiziert und ermöglicht so eine gemeinsame Weiterentwicklung. Bisher existiert eine Entwickleroberfläche. Um den DRM der Community zur Verfügung zu stellen, sind noch Gestaltungen an einer benutzerfreundlichen, anpassbaren Weboberfläche (GUI) erforderlich, die externe Kompetenz verlangen. Die hier beantragten Gelder sollen für die Beauftragung eine professionellen User Interface Gestaltung durch eine Agentur mit Erfahrung im wissenschaftlichen Kontext genutzt werden.  
+
+## Mitmachen
+
+Die Grußformel Ihrer digitalen Briefedition sollen bei quoteSalute dabei sein? Informationen finden Sie im Ordner [doc](https://github.com/telota/quoteSalute/tree/master/doc). Hier stellen wir Ihnen bereit:
+
+* unsere [Dokumentation](https://github.com/telota/quoteSalute/blob/master/doc/documentation-de.md)
+* eine [Beispieldatei](https://github.com/telota/quoteSalute/blob/master/doc/example.xml) der benötigten Datenstruktur.
+* eine [Vorlage](https://github.com/telota/quoteSalute/blob/master/doc/template.xml) zur schnellen Erstellung Ihrer quoteSalute Daten.
+* [XSLT-Skripte](https://github.com/telota/quoteSalute/tree/master/doc/xslt-examples) dokumentieren anhand von Beispieldaten die Extraktion von salute-Elementen.
+* ein [Thunderbird-Addon](https://github.com/telota/quoteSalute_xpi/releases/download/v0.2.5/quotesalute-0.2.5_build11.xpi) (siehe [quoteSalute_xpi](https://github.com/telota/quotesalute_xpi))
+
+## Lizenzen Programmcode und Dokumentation
+
+© Berlin-Brandenburgische Akademie der Wissenschaften 2021
+
+* Programmcode: LGPL 3.0
+* Dokumentation: CC BY 4.0
