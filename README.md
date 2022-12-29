@@ -8,7 +8,7 @@ CVMA und TELOTA entwickeln eine webbasierte Lösung, die sämtliche Komponenten 
 
 Die Konfiguration des DRM wird niedrigschwellig über extern einzulesende Dateien gestaltet. Anpassungen der Anzeige entsprechend eigener Bedürfnisse, das Erstellen von Auswahllisten und eine Einbindung von kontrolliertem Vokabular lassen sich so realisieren. Durch Veränderung der Serververknüpfungen kann der DRM auf jedem Server laufen.   
 
-Da sowohl der komplette Quellcode als auch die verwendeten Bibliotheken frei verfügbar sind, können diese an die Anforderungen Dritter angepasst werden. Der Quellcode wird auch in Git-Repositorien publiziert und ermöglicht so eine gemeinsame Weiterentwicklung. Bisher existiert eine Entwickleroberfläche. Um den DRM der Community zur Verfügung zu stellen, sind noch Gestaltungen an einer benutzerfreundlichen, anpassbaren Weboberfläche (GUI) erforderlich, die externe Kompetenz verlangen.
+Da sowohl der komplette Quellcode als auch die verwendeten Bibliotheken frei verfügbar sind, können diese an die Anforderungen Dritter angepasst werden. Der Quellcode wird auch in Git-Repositorien publiziert und ermöglicht so eine gemeinsame Weiterentwicklung. Bisher existiert eine Entwickleroberfläche. 
 
 ## Mitmachen
 
